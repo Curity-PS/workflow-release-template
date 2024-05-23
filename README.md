@@ -12,3 +12,10 @@ with the same directory structure, branches, and files.
 2. Choose the Repository Template from the dropdown.
 
 After you make your repository a template, anyone with access to the repository can generate a new repository with the same directory structure and files as your default branch.
+
+# Plugin development
+
+Before starting with the plugin development, Make sure you have right settings in place.
+
+1. Please check and update _`Dependencies`_, _`Version`_, _`Description`_  iN `build.gradle` file.
+2. _`rootProject.name`_ in `settings.gradle` file.
