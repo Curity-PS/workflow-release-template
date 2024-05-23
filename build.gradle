@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Curity AB
+ * Copyright 2024 Curity AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,18 @@ plugins {
 
 repositories {
     mavenLocal()
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
-    }
+    mavenCentral()
 }
 
 dependencies {
-    api 'org.bitbucket.b_c:jose4j:0.9.6'
     compileOnly 'se.curity.identityserver:identityserver.sdk:9.2.0'
     compileOnly 'org.slf4j:slf4j-api:1.7.36'
-    compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10'
 }
 
 group = 'io.curity.identityserver.plugins.authenticator'
 java.sourceCompatibility = JavaVersion.VERSION_21
 version = '1.0.0' // Version release
-description = 'Curity Authenticator Description' // Description of the plugin
+description = 'Curity Plugin Description' // Description of the plugin
 
 
 tasks.withType(JavaCompile) {
@@ -44,8 +40,4 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
-}
-
-task printProperties {
-    println "version:  $version"
 }
