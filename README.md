@@ -19,3 +19,9 @@ Before starting with the plugin development, Make sure you have right settings i
 
 1. Please check and update _`Dependencies`_, _`Version`_, _`Description`_  iN `build.gradle` file.
 2. _`rootProject.name`_ in `settings.gradle` file.
+
+After the plugin development , please follow the below steps to make release.
+
+1. Navigate to the Actions tab. 
+2. On the left hand side , choose `_Gradle release workflow_` under _`All workflows`_ . 
+3. You would see _`Run workflow`_ button on the right side to run the release.
