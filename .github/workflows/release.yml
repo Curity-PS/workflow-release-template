@@ -35,7 +35,7 @@ jobs:
           zip --junk-paths plugin-artifacts staging/*
 
       - name: Upload plugin artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: plugin-artifacts.zip
           path: plugin-artifacts.zip
@@ -54,14 +54,15 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-on-empty: "false"
           skip-tag: "true"
 
       - name: Fetch release version from build gradle file
         run: |
-          echo "RELEASE_VERSION=$(./gradlew printProperties | grep version | awk '{print $2}')" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=$(./gradlew properties | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Download plugin artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: plugin-artifacts.zip
 
@@ -88,7 +89,3 @@ jobs:
           asset_path: ./plugin-artifacts.zip
           asset_name: plugin-artifacts.zip
           asset_content_type: application/zip
-
-
-
-
