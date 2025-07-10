@@ -34,3 +34,13 @@ folder of your `IDSVR_HOME`.
 ```bash
 IDSVR_HOME=/opt/idsvr ./gradlew deployToLocal
 ```
+
+# Create release folder
+
+To compile the plugin and collect all the dependencies, run this task:
+
+```bash
+./gradlew createRelease
+```
+
+The result will be in `build/release`

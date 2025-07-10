@@ -58,3 +58,11 @@ tasks.register('deployToLocal', Sync) {
     from jar
     into "${System.env.IDSVR_HOME}/usr/share/plugins/${project.group}.${project.name}"
 }
+
+tasks.register('createRelease', Sync) {
+    dependsOn build
+    dependsOn jar
+    from configurations.runtimeClasspath
+    from jar
+    into layout.buildDirectory.dir('release')
+}
