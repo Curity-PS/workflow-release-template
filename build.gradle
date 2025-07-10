@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'se.curity.identityserver:identityserver.sdk:9.2.0'
+    compileOnly 'se.curity.identityserver:identityserver.sdk:10.2.1'
     compileOnly 'org.slf4j:slf4j-api:2.0.12'
 
     testImplementation 'se.curity.identityserver:identityserver.sdk:9.2.0'
@@ -52,3 +52,17 @@ test {
     }
 }
 
+tasks.register('deployToLocal', Sync) {
+    dependsOn jar
+    from configurations.runtimeClasspath
+    from jar
+    into "${System.env.IDSVR_HOME}/usr/share/plugins/${project.group}.${project.name}"
+}
+
+tasks.register('createRelease', Sync) {
+    dependsOn build
+    dependsOn jar
+    from configurations.runtimeClasspath
+    from jar
+    into layout.buildDirectory.dir('release')
+}

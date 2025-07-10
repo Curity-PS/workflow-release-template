@@ -25,3 +25,22 @@ After the plugin development , please follow the below steps to make release.
 1. Navigate to the Actions tab. 
 2. On the left hand side , choose `_Gradle release workflow_` under _`All workflows`_ . 
 3. You would see _`Run workflow`_ button on the right side to run the release.
+
+# Deploy to local server
+
+To deploy your plugin to a local server, a gradle task is added to collect the runtime dependencies into the plugins
+folder of your `IDSVR_HOME`.
+
+```bash
+IDSVR_HOME=/opt/idsvr ./gradlew deployToLocal
+```
+
+# Create release folder
+
+To compile the plugin and collect all the dependencies, run this task:
+
+```bash
+./gradlew createRelease
+```
+
+The result will be in `build/release`
