@@ -1,5 +1,3 @@
-# This workflow will build a curity-sdk-commons with Maven
-
 name: Build & Release
 
 on:
