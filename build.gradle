@@ -21,6 +21,7 @@ plugins {
 
 group = 'io.curity.identityserver.plugins'
 description = 'Curity Plugin Description'
+
 if (project.hasProperty('releaseVersion')) {
     project.version = project.releaseVersion
 } else {
@@ -75,12 +76,13 @@ tasks.register('deployToLocal', Sync) {
     description = 'Deploys the plugin JAR to the local Curity server'
     dependsOn jar
 
-    doFirst {
-        logger.info('Starting deployToLocal task')
-        if (!System.getenv('IDSVR_HOME')) {
-            throw new GradleException('IDSVR_HOME environment variable must be set to deploy the plugin')
-        }
+    if (!System.getenv('IDSVR_HOME')) {
+        throw new GradleException('IDSVR_HOME environment variable must be set to deploy the plugin')
     }
+
+    def pluginDir = file("${System.env.IDSVR_HOME}/usr/share/plugins/${project.group}.${project.name}")
+
+    into pluginDir
 
     from(jar) {
         eachFile { file ->
@@ -88,13 +90,24 @@ tasks.register('deployToLocal', Sync) {
         }
     }
 
-    def pluginDir = file("${System.env.IDSVR_HOME}/usr/share/plugins/${project.group}.${project.name}")
-    doLast {
-        logger.info("Deploying to: ${pluginDir}")
-        into(pluginDir)
-        logger.lifecycle("Successfully deployed plugin to ${pluginDir}")
+    from(configurations.runtimeClasspath) {
+        eachFile { file ->
+            logger.info("Copying dependency JAR: ${file.path}")
+        }
     }
 
+    doFirst {
+        logger.info('Starting deployToLocal task')
+        logger.info("Target plugin directory: ${pluginDir.absolutePath}")
+    }
+
+    doLast {
+        logger.lifecycle("Successfully deployed plugin and dependencies to ${getDestinationDir().absolutePath}")
+        logger.info("Deployed artifacts:")
+        getDestinationDir().eachFile { file ->
+            logger.info("- ${file.name}")
+        }
+    }
 }
 
 
