@@ -56,17 +56,68 @@ test {
     }
 }
 
-tasks.register('deployToLocal', Sync) {
-    dependsOn jar
-    from configurations.runtimeClasspath
-    from jar
-    into "${System.env.IDSVR_HOME}/usr/share/plugins/${project.group}.${project.name}"
+// Configure JAR manifest
+jar {
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Built-By': System.getProperty('user.name'),
+                'Build-Jdk': "${System.getProperty('java.version')} (${System.getProperty('java.vendor')})",
+                'Created-By': "Gradle ${gradle.gradleVersion}"
+        )
+    }
 }
 
-tasks.register('createRelease', Sync) {
-    dependsOn build
+
+// Custom task for local deployment
+tasks.register('deployToLocal', Sync) {
+    description = 'Deploys the plugin JAR to the local Curity server'
     dependsOn jar
+
+    doFirst {
+        logger.info('Starting deployToLocal task')
+        if (!System.getenv('IDSVR_HOME')) {
+            throw new GradleException('IDSVR_HOME environment variable must be set to deploy the plugin')
+        }
+    }
+
+    from(jar) {
+        eachFile { file ->
+            logger.info("Copying plugin JAR: ${file.path}")
+        }
+    }
+
+    def pluginDir = file("${System.env.IDSVR_HOME}/usr/share/plugins/${project.group}.${project.name}")
+    doLast {
+        logger.info("Deploying to: ${pluginDir}")
+        into(pluginDir)
+        logger.lifecycle("Successfully deployed plugin to ${pluginDir}")
+    }
+
+}
+
+
+// Custom task for creating release
+tasks.register('createRelease', Sync) {
+    description = 'Creates a release package with all necessary artifacts'
+    dependsOn build, jar
+
     from configurations.runtimeClasspath
     from jar
+
     into layout.buildDirectory.dir('release')
+
+    doFirst {
+        logger.info('Starting createRelease task')
+        logger.info("Release version: ${project.version}")
+    }
+
+    doLast {
+        logger.lifecycle("Release package created at: ${destinationDir}")
+        logger.info("Included artifacts:")
+        destinationDir.eachFile { file ->
+            logger.info("- ${file.name}")
+        }
+    }
 }
