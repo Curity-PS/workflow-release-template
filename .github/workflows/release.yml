@@ -76,7 +76,7 @@ jobs:
 
       - name: Create release jars
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        run: ./gradlew createRelease -PreleaseVersion=${{ env.NEW_VERSION }}
+        run: ./gradlew createReleaseDir -PreleaseVersion=${{ env.NEW_VERSION }}
 
       - name: Build plugin artifacts zip
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
