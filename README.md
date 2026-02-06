@@ -31,7 +31,7 @@ The plugin development workflow supports configuration through a `.env` file for
 
 2. Update the values in `.env`:
    - `IDSVR_HOME`: Path to your Curity Identity Server installation directory
-   - `LICENSE_KEY`: Your Curity Identity Server license key
+   - `LICENSE_KEY`: Your Curity Identity Server license JWT
 
 **Note:** The `.env` file is already included in `.gitignore` and will not be committed to version control.
 
