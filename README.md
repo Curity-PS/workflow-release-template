@@ -20,6 +20,19 @@ Before starting with the plugin development, Make sure you have right settings i
 1. Please check and update _`Dependencies`_, _`Version`_, _`Description`_  iN `build.gradle` file.
 2. _`rootProject.name`_ in `settings.gradle` file.
 
+## Github authentication
+
+This project uses dependencies hosted on GitHub Packages. You need to configure your GitHub credentials in `~/.gradle/gradle.properties`:
+
+1. Create a [GitHub Personal Access Token](https://github.com/settings/tokens) with the `read:packages` scope.
+
+2. Add the following to your `~/.gradle/gradle.properties` file (create it if it doesn't exist):
+
+   ```properties
+   gpr.user=YOUR_GITHUB_USERNAME
+   gpr.token=YOUR_GITHUB_TOKEN
+   ```
+
 ## Environment Configuration
 
 The plugin development workflow supports configuration through a `.env` file for convenience. This allows you to set environment variables without exporting them in your shell.
