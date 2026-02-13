@@ -5,7 +5,7 @@ on:
 
 jobs:
   release:
-    uses: <owner>/ps-release-workflow/.github/workflows/release.yml@main
+    uses: curity-ps/ps-release-workflow/.github/workflows/release.yml@main
     secrets:
       PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
       LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
