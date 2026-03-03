@@ -17,7 +17,7 @@
 plugins {
     id 'java-library'
     id 'groovy'
-    id 'io.curity.ps.curity-plugin-dev' version '0.3.0'
+    id 'io.curity.gradle.curity-plugin-dev' version '0.3.0'
 }
 
 group = 'io.curity.identityserver.plugins'
@@ -45,12 +45,12 @@ dependencies {
     compileOnly 'se.curity.identityserver:identityserver.sdk:11.0.0'
     compileOnly 'org.slf4j:slf4j-api:2.0.12'
 
-    implementation 'io.curity.ps:curity-ps-sdk-commons:0.3.1'
+    implementation 'io.curity:curity-ps-sdk-commons:0.3.1'
 
     testImplementation 'se.curity.identityserver:identityserver.sdk:11.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
     testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
-    testImplementation 'io.curity.ps:curity-ps-sdk-commons:0.3.1:tests'
+    testImplementation 'io.curity:curity-ps-sdk-commons:0.3.1:tests'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
