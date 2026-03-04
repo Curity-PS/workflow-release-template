@@ -20,6 +20,34 @@ Before starting with the plugin development, Make sure you have right settings i
 1. Please check and update _`Dependencies`_, _`Version`_, _`Description`_  iN `build.gradle` file.
 2. _`rootProject.name`_ in `settings.gradle` file.
 
+## Github authentication
+
+This project uses dependencies hosted on GitHub Packages. You need to configure your GitHub credentials in `~/.gradle/gradle.properties`:
+
+1. Create a [GitHub Personal Access Token](https://github.com/settings/tokens) with the `read:packages` scope.
+
+2. Add the following to your `~/.gradle/gradle.properties` file (create it if it doesn't exist):
+
+   ```properties
+   gpr.user=YOUR_GITHUB_USERNAME
+   gpr.token=YOUR_GITHUB_TOKEN
+   ```
+
+## Environment Configuration
+
+The plugin development workflow supports configuration through a `.env` file for convenience. This allows you to set environment variables without exporting them in your shell.
+
+1. Copy the `.env-example` file to `.env`:
+   ```bash
+   cp .env-example .env
+   ```
+
+2. Update the values in `.env`:
+   - `IDSVR_HOME`: Path to your Curity Identity Server installation directory
+   - `LICENSE_KEY`: Your Curity Identity Server license JWT
+
+**Note:** The `.env` file is already included in `.gitignore` and will not be committed to version control.
+
 After the plugin development , please follow the below steps to make release.
 
 1. Navigate to the Actions tab. 
@@ -28,11 +56,12 @@ After the plugin development , please follow the below steps to make release.
 
 # Deploy to local server
 
-To deploy your plugin to a local server, a gradle task is added to collect the runtime dependencies into the plugins
-folder of your `IDSVR_HOME`.
+The Curity Plugin Development Gradle plugin provides a task to deploy your plugin to a local server. It will collect the runtime dependencies into the plugins folder of your `IDSVR_HOME`.
+
+Make sure you have configured the `IDSVR_HOME` environment variable (either in your shell or in a `.env` file):
 
 ```bash
-IDSVR_HOME=/opt/idsvr ./gradlew deployToLocal
+./gradlew deployToLocal
 ```
 
 # Create release folder
@@ -40,7 +69,7 @@ IDSVR_HOME=/opt/idsvr ./gradlew deployToLocal
 To compile the plugin and collect all the dependencies, run this task:
 
 ```bash
-./gradlew createRelease
+./gradlew createReleaseDir
 ```
 
 The result will be in `build/release`
