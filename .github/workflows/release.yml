@@ -16,9 +16,13 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   release:
-    uses: curity-ps/ps-release-workflow/.github/workflows/release.yml@main
+    uses: curity-ps/release-workflow/.github/workflows/release.yml@main
     with:
       skip_test: ${{ !inputs.run_unit_tests }}
       skip_integration_test: ${{ !inputs.run_integration_tests }}
