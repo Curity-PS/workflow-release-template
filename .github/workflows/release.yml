@@ -2,10 +2,28 @@ name: Build & Release
 
 on:
   workflow_dispatch:
+    inputs:
+      run_unit_tests:
+        description: 'Run unit tests'
+        type: boolean
+        default: true
+      run_integration_tests:
+        description: 'Run integration tests'
+        type: boolean
+        default: true
+      make_release:
+        description: 'Create a release'
+        type: boolean
+        default: false
 
 jobs:
   release:
     uses: curity-ps/ps-release-workflow/.github/workflows/release.yml@main
+    with:
+      skip_test: ${{ !inputs.run_unit_tests }}
+      skip_integration_test: ${{ !inputs.run_integration_tests }}
+      version_from_gradle: false
+      make_release: ${{ inputs.make_release }}
     secrets:
       PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
       LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
