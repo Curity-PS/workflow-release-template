@@ -60,6 +60,17 @@ java {
     }
 }
 
+// Ensure the shared .githooks directory is used for git hooks
+tasks.register('configureGitHooks') {
+    onlyIf { file('.git').exists() }
+    doLast {
+        exec {
+            commandLine 'git', 'config', 'core.hooksPath', '.githooks'
+        }
+    }
+}
+tasks.named('build').configure { dependsOn 'configureGitHooks' }
+
 test {
     useJUnitPlatform()
     testLogging {

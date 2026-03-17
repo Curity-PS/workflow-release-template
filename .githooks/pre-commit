@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook that prevents committing secrets:
+#   1. Blocks .env files (even if not in .gitignore)
+#   2. Blocks XML files containing <license-key>...</license-key> with a value
+#      (parameterized values like #{PARAM} are allowed)
+#   3. Blocks JSON files containing a Curity license ("License":"<value>")
+#
+
+set -euo pipefail
+
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Get list of staged files (added, copied, modified)
+staged_files=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$staged_files" ]; then
+    exit 0
+fi
+
+errors=0
+
+# Check 1: Block .env files
+env_files=$(echo "$staged_files" | grep -E '(^|/)\.env$' || true)
+if [ -n "$env_files" ]; then
+    echo -e "${RED}ERROR: Commit blocked — .env file(s) contain secrets and must not be committed:${NC}"
+    echo "$env_files" | sed 's/^/  /'
+    errors=1
+fi
+
+# Check 2: Block XML files containing <license-key> with a non-empty value
+xml_files=$(echo "$staged_files" | grep -iE '\.xml$' || true)
+for file in $xml_files; do
+    if git show ":$file" | grep -qE '<license-key>[^<]+</license-key>' \
+       && ! git show ":$file" | grep -qE '<license-key>#\{[A-Za-z_][A-Za-z0-9_]*\}</license-key>'; then
+        echo -e "${RED}ERROR: Commit blocked — $file contains a <license-key> value. Remove the secret before committing.${NC}"
+        errors=1
+    fi
+done
+
+# Check 3: Block JSON files containing a Curity license key
+json_files=$(echo "$staged_files" | grep -iE '\.json$' || true)
+for file in $json_files; do
+    if git show ":$file" | grep -qE '"License"\s*:\s*"[^"]+"'; then
+        echo -e "${RED}ERROR: Commit blocked — $file contains a Curity license key. Remove the secret before committing.${NC}"
+        errors=1
+    fi
+done
+
+if [ "$errors" -ne 0 ]; then
+    echo ""
+    echo "To fix: unstage the offending file(s) or remove the secret values."
+    exit 1
+fi
+
+exit 0
