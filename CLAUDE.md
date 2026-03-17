@@ -81,7 +81,7 @@ This project uses **Conventional Commits**. All commit messages must follow this
 - Do not end the description with a period
 - Use imperative mood in the description (e.g., "add" not "added" or "adds")
 - Keep the first line under 72 characters
-- Add `BREAKING CHANGE:` in the footer (or `!` after type/scope) for breaking changes
+- Add `BREAKING CHANGE:` in the footer
 
 **Examples:**
 ```
@@ -89,7 +89,9 @@ feat: add token introspection support
 fix(auth): handle expired refresh tokens gracefully
 docs: update environment setup instructions
 chore: bump SDK version to 11.1.0
-feat!: change plugin descriptor format
+feat: change plugin descriptor format
+
+BREAKING CHANGE: Format of the descriptor is changing
 ```
 
 ## Release Process
