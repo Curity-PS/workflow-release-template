@@ -3,6 +3,7 @@
 # Pre-commit hook that prevents committing secrets:
 #   1. Blocks .env files (even if not in .gitignore)
 #   2. Blocks XML files containing <license-key>...</license-key> with a value
+#      (parameterized values like #{PARAM} are allowed)
 #   3. Blocks JSON files containing a Curity license ("License":"<value>")
 #
 
@@ -31,7 +32,8 @@ fi
 # Check 2: Block XML files containing <license-key> with a non-empty value
 xml_files=$(echo "$staged_files" | grep -iE '\.xml$' || true)
 for file in $xml_files; do
-    if git show ":$file" | grep -qE '<license-key>[^<]+</license-key>'; then
+    if git show ":$file" | grep -qE '<license-key>[^<]+</license-key>' \
+       && ! git show ":$file" | grep -qE '<license-key>#\{[A-Za-z_][A-Za-z0-9_]*\}</license-key>'; then
         echo -e "${RED}ERROR: Commit blocked — $file contains a <license-key> value. Remove the secret before committing.${NC}"
         errors=1
     fi
