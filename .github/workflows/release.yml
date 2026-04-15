@@ -29,5 +29,4 @@ jobs:
       version_from_gradle: false
       make_release: ${{ inputs.make_release }}
     secrets:
-      PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
       LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
