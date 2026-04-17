@@ -47,7 +47,6 @@ out/
 *.iml
 *.ipr
 *.iws
-.editorconfig
 
 ##############################
 ## OS X
